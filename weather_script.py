@@ -1,28 +1,23 @@
-weather-api-project
-├── src
-│   ├── weather_script.py
-│   ├── utils
-│   │   └── helpers.py
-│   └── config
-│       └── settings.py
-├── tests
-│   └── test_weather.py
-├── requirements.txt
-└── README.md
-```
-
-```python
 import requests
 from datetime import datetime
 import os
 from dotenv import load_dotenv
+import sys
+from pathlib import Path
 
-# Load environment variables
-load_dotenv()
+# Add src directory to path to allow imports
+src_dir = Path(__file__).parent
+root_dir = src_dir.parent
+sys.path.append(str(root_dir))
+
+# Load environment variables from root .env file
+load_dotenv(root_dir / 'src' / '.env')
 
 class WeatherAPI:
     def __init__(self):
         self.api_key = os.getenv('OPENWEATHER_API_KEY')
+        if not self.api_key:
+            raise ValueError("OPENWEATHER_API_KEY not found in environment variables")
         self.base_url = "http://api.openweathermap.org/data/2.5/weather"
 
     def get_weather(self, city):
