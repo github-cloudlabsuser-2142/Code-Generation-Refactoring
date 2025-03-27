@@ -30,7 +30,9 @@ def draw_cards(deck: List[Tuple[int, str]], count: int) -> List[Tuple[int, str]]
     """Draw a specified number of cards from the deck."""
     if count > len(deck):
         raise ValueError(f"Cannot draw {count} cards from a deck of {len(deck)} cards")
-    return deck[:count]
+    drawn_cards = deck[:count]
+    del deck[:count]  # Remove the drawn cards from the deck
+    return drawn_cards
 
 def main() -> None:
     """Main program execution."""
@@ -46,8 +48,14 @@ def main() -> None:
         for i, card in enumerate(drawn_cards, 1):
             print(f"Card {i}: {format_card(card)}")
 
+        # Display remaining cards in the deck
+        print(f"\nRemaining cards in the deck: {len(deck)}")
+
+    except ValueError as e:
+        print(f"Error: {e}")
+        return 1
     except Exception as e:
-        print(f"An error occurred: {e}")
+        print(f"An unexpected error occurred: {e}")
         return 1
 
     return 0
